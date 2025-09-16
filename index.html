@@ -20,13 +20,29 @@
       box-sizing: border-box;
       font-size: 14px;
     }
-    .main-container {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      grid-template-areas:
-        "timer map"
-        "rune-cost map"
-        "weakness-table weakness-table";
+   /* 既存のPC用レイアウト */
+.main-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-areas:
+    "timer map"
+    "rune-cost map"
+    "weakness-table weakness-table";
+}
+
+/* スマホ用レイアウトを追記 */
+@media (max-width: 768px) {
+  .main-container {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "timer"
+      "map"
+      "weakness-table"
+      "phases"
+      "rune-cost";
+  }
+}
+
       gap: 10px;
       width: 100%;
       max-width: 1150px;
@@ -214,3 +230,4 @@
   </script>
 </body>
 </html>
+
