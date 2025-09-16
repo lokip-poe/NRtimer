@@ -20,31 +20,31 @@
       box-sizing: border-box;
       font-size: 14px;
     }
-/* PC用レイアウト */
-.main-container {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  grid-template-areas:
-    "timer map"
-    "rune-cost map"
-    "weakness-table weakness-table";
-  gap: 10px;
-  width: 100%;
-  max-width: 1150px;
-}
-
-/* スマホ用レイアウト */
-@media (max-width: 768px) {
-  .main-container {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "timer"
-      "map"
-      "weakness-table"
-      "phases"
-      "rune-cost";
-  }
-}
+    /* PC */
+    .main-container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-areas:
+        "timer map"
+        "phases map"
+        "rune-cost map"
+        "weakness-table weakness-table";
+      gap: 10px;
+      width: 100%;
+      max-width: 1150px;
+    }
+    /* SP */
+    @media (max-width: 768px) {
+      .main-container {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "timer"
+          "map"
+          "weakness-table"
+          "phases"
+          "rune-cost";
+      }
+    }
 
     .grid-item {
       background-color: #1e1e1e;
@@ -57,6 +57,7 @@
       align-items: center;
       text-align: center;
     }
+
     .timer-wrapper { grid-area: timer; align-items: stretch; }
     #timer-title {
       font-family: 'Cinzel', serif;
@@ -85,7 +86,7 @@
     #startButton { background-color: #556b2f; color: #fff; }
     #resetButton { background-color: #8b0000; color: #fff; }
 
-    .phases-table-container { width: 100%; margin-bottom: 10px; }
+    .phases-table-container { grid-area: phases; width: 100%; }
     .phases-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
     .phases-table-container table { width: 100%; border-collapse: collapse; }
     .phases-table-container th, .phases-table-container td {
@@ -95,7 +96,7 @@
     }
     .phases-table-container th { color: #d4af37; background:#111; }
 
-    .rune-cost-table-container { grid-area: rune-cost; align-items: stretch; width:100%; }
+    .rune-cost-table-container { grid-area: rune-cost; width: 100%; }
     .rune-cost-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
     .rune-cost-table-container table { width: 100%; border-collapse: collapse; }
     .rune-cost-table-container th, .rune-cost-table-container td {
@@ -113,21 +114,12 @@
     .weakness-table-container { grid-area: weakness-table; }
     .weakness-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
     .weakness-table-container img { width:100%; height:auto; border-radius:6px; border:1px solid #444; }
-
-    @media (max-width: 1000px){
-      .main-container{
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "timer"
-          "rune-cost"
-          "map"
-          "weakness-table";
-      }
-    }
   </style>
 </head>
 <body>
   <div class="main-container">
+
+    <!-- タイマー -->
     <div class="grid-item timer-wrapper">
       <div id="timer-title">NIGHTREIGN TIMER</div>
       <div id="phase-name">04:30</div>
@@ -136,51 +128,52 @@
         <button id="startButton">START</button>
         <button id="resetButton">RESET</button>
       </div>
-      <div class="phases-table-container">
-        <h2>PHASE DURATIONS</h2>
-        <table>
-          <thead>
-            <tr><th>Phase</th><th>Duration</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Phase 1</td><td>4.5m</td></tr>
-            <tr><td>Phase 2</td><td>3m</td></tr>
-            <tr><td>Phase 3</td><td>3.5m</td></tr>
-            <tr><td>Phase 4</td><td>3m</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="rune-cost-table-container">
-        <h2>RUNE COST IN NIGHTREIGN</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Level</th>
-              <th>Level Cost</th>
-              <th>Total Cost</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>0</td><td>0</td></tr>
-            <tr><td>2</td><td>3698</td><td>3698</td></tr>
-            <tr><td>3</td><td>7922</td><td>11620</td></tr>
-            <tr><td>4</td><td>12348</td><td>23968</td></tr>
-            <tr><td>5</td><td>16978</td><td>40946</td></tr>
-            <tr><td>6</td><td>21818</td><td>62764</td></tr>
-            <tr><td>7</td><td>26869</td><td>89633</td></tr>
-            <tr><td>8</td><td>32137</td><td>121770</td></tr>
-            <tr><td>9</td><td>37624</td><td>159394</td></tr>
-            <tr><td>10</td><td>43335</td><td>202729</td></tr>
-            <tr><td>11</td><td>49271</td><td>252000</td></tr>
-            <tr><td>12</td><td>55439</td><td>307439</td></tr>
-            <tr><td>13</td><td>61840</td><td>369279</td></tr>
-            <tr><td>14</td><td>68479</td><td>437758</td></tr>
-            <tr><td>15</td><td>75358</td><td>513116</td></tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
+    <!-- フェーズ表 -->
+    <div class="grid-item phases-table-container">
+      <h2>PHASE DURATIONS</h2>
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>Duration</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Phase 1</td><td>4.5m</td></tr>
+          <tr><td>Phase 2</td><td>3m</td></tr>
+          <tr><td>Phase 3</td><td>3.5m</td></tr>
+          <tr><td>Phase 4</td><td>3m</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ルーンコスト -->
+    <div class="grid-item rune-cost-table-container">
+      <h2>RUNE COST IN NIGHTREIGN</h2>
+      <table>
+        <thead>
+          <tr><th>Level</th><th>Level Cost</th><th>Total Cost</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>2</td><td>3698</td><td>3698</td></tr>
+          <tr><td>3</td><td>7922</td><td>11620</td></tr>
+          <tr><td>4</td><td>12348</td><td>23968</td></tr>
+          <tr><td>5</td><td>16978</td><td>40946</td></tr>
+          <tr><td>6</td><td>21818</td><td>62764</td></tr>
+          <tr><td>7</td><td>26869</td><td>89633</td></tr>
+          <tr><td>8</td><td>32137</td><td>121770</td></tr>
+          <tr><td>9</td><td>37624</td><td>159394</td></tr>
+          <tr><td>10</td><td>43335</td><td>202729</td></tr>
+          <tr><td>11</td><td>49271</td><td>252000</td></tr>
+          <tr><td>12</td><td>55439</td><td>307439</td></tr>
+          <tr><td>13</td><td>61840</td><td>369279</td></tr>
+          <tr><td>14</td><td>68479</td><td>437758</td></tr>
+          <tr><td>15</td><td>75358</td><td>513116</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- マップ -->
     <div class="grid-item map-panel">
       <div class="map-header">
         <div style="font-weight:600; color:#d4af37;">MAP</div>
@@ -198,10 +191,12 @@
       <img id="gameMap" alt="地変マップ">
     </div>
 
+    <!-- 弱点 -->
     <div class="grid-item weakness-table-container">
       <h2>NIGHT LORD WEAKNESS</h2>
       <img src="images/weakness.png" alt="弱点表">
     </div>
+
   </div>
 
   <script>
@@ -229,5 +224,3 @@
   </script>
 </body>
 </html>
-
-
