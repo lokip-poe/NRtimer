@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Night Reign Timer & Weakness + Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #121212;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 10px;
+      overflow: auto;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    .main-container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-areas:
+        "timer map"
+        "rune-cost map"
+        "weakness-table weakness-table";
+      gap: 10px;
+      width: 100%;
+      max-width: 1150px;
+    }
+    .grid-item {
+      background-color: #1e1e1e;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+      border: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .timer-wrapper { grid-area: timer; align-items: stretch; }
+    #timer-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1em;
+      font-weight: 700;
+      color: #d4af37;
+      margin-bottom: 0.3em;
+    }
+    #phase-name {
+      font-size: 2.2em;
+      font-weight: bold;
+      color: #ffff88;
+      text-shadow: 0 0 8px rgba(255,255,136,0.7);
+      margin: 0.2em 0;
+    }
+    #phase-info { font-size: 0.85em; color: #ccc; margin-bottom: 0.5em; }
+    .buttons { display: flex; justify-content: center; gap: 0.5em; margin-bottom: 0.8em; }
+    .buttons button {
+      padding: 0.3em 0.6em;
+      font-size: 0.8em;
+      font-weight: bold;
+      border: none;
+      border-radius: 0.4em;
+      cursor: pointer;
+    }
+    #startButton { background-color: #556b2f; color: #fff; }
+    #resetButton { background-color: #8b0000; color: #fff; }
+
+    .phases-table-container { width: 100%; margin-bottom: 10px; }
+    .phases-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
+    .phases-table-container table { width: 100%; border-collapse: collapse; }
+    .phases-table-container th, .phases-table-container td {
+      border: 1px solid #666;
+      padding: 6px 10px;
+      text-align: center;
+    }
+    .phases-table-container th { color: #d4af37; background:#111; }
+
+    .rune-cost-table-container { grid-area: rune-cost; align-items: stretch; width:100%; }
+    .rune-cost-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
+    .rune-cost-table-container table { width: 100%; border-collapse: collapse; }
+    .rune-cost-table-container th, .rune-cost-table-container td {
+      border: 1px solid #666;
+      padding: 6px 10px;
+      text-align: center;
+    }
+    .rune-cost-table-container th { color: #d4af37; background:#111; }
+
+    .map-panel { grid-area: map; align-items: stretch; }
+    .map-header { width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .map-header label { margin-right:4px; }
+    #gameMap { width:100%; height:auto; border-radius:6px; border:1px solid #444; }
+
+    .weakness-table-container { grid-area: weakness-table; }
+    .weakness-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
+    .weakness-table-container img { width:100%; height:auto; border-radius:6px; border:1px solid #444; }
+
+    @media (max-width: 1000px){
+      .main-container{
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "timer"
+          "rune-cost"
+          "map"
+          "weakness-table";
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="grid-item timer-wrapper">
+      <div id="timer-title">NIGHTREIGN TIMER</div>
+      <div id="phase-name">04:30</div>
+      <div id="phase-info">Phase 1: 4.5m</div>
+      <div class="buttons">
+        <button id="startButton">START</button>
+        <button id="resetButton">RESET</button>
+      </div>
+      <div class="phases-table-container">
+        <h2>PHASE DURATIONS</h2>
+        <table>
+          <thead>
+            <tr><th>Phase</th><th>Duration</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Phase 1</td><td>4.5m</td></tr>
+            <tr><td>Phase 2</td><td>3m</td></tr>
+            <tr><td>Phase 3</td><td>3.5m</td></tr>
+            <tr><td>Phase 4</td><td>3m</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rune-cost-table-container">
+        <h2>RUNE COST IN NIGHTREIGN</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Level Cost</th>
+              <th>Total Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>2</td><td>3698</td><td>3698</td></tr>
+            <tr><td>3</td><td>7922</td><td>11620</td></tr>
+            <tr><td>4</td><td>12348</td><td>23968</td></tr>
+            <tr><td>5</td><td>16978</td><td>40946</td></tr>
+            <tr><td>6</td><td>21818</td><td>62764</td></tr>
+            <tr><td>7</td><td>26869</td><td>89633</td></tr>
+            <tr><td>8</td><td>32137</td><td>121770</td></tr>
+            <tr><td>9</td><td>37624</td><td>159394</td></tr>
+            <tr><td>10</td><td>43335</td><td>202729</td></tr>
+            <tr><td>11</td><td>49271</td><td>252000</td></tr>
+            <tr><td>12</td><td>55439</td><td>307439</td></tr>
+            <tr><td>13</td><td>61840</td><td>369279</td></tr>
+            <tr><td>14</td><td>68479</td><td>437758</td></tr>
+            <tr><td>15</td><td>75358</td><td>513116</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-item map-panel">
+      <div class="map-header">
+        <div style="font-weight:600; color:#d4af37;">MAP</div>
+        <div>
+          <label for="mapSelect">地変：</label>
+          <select id="mapSelect">
+            <option>通常</option>
+            <option>火口</option>
+            <option>山嶺</option>
+            <option>腐れ森</option>
+            <option>ノクラテオ</option>
+          </select>
+        </div>
+      </div>
+      <img id="gameMap" alt="地変マップ">
+    </div>
+
+    <div class="grid-item weakness-table-container">
+      <h2>NIGHT LORD WEAKNESS</h2>
+      <img src="images/weakness.png" alt="弱点表">
+    </div>
+  </div>
+
+  <script>
+    const phaseNameDisplay=document.getElementById('phase-name');
+    const phaseInfoDisplay=document.getElementById('phase-info');
+    const startButton=document.getElementById('startButton');
+    const resetButton=document.getElementById('resetButton');
+    let timerInterval; let totalSecondsElapsed=0;
+    const phases=[{duration:270,name:"Phase 1",info:"4.5m"},{duration:180,name:"Phase 2",info:"3m"},{duration:210,name:"Phase 3",info:"3.5m"},{duration:180,name:"Phase 4",info:"3m"}];
+    let totalDuration=phases.reduce((s,p)=>s+p.duration,0);
+    let isRunning=false;
+    function formatTime(t){const m=Math.floor(t/60),s=t%60;return String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');}
+    function updateDisplay(){let idx=0,acc=0;for(let i=0;i<phases.length;i++){if(totalSecondsElapsed<acc+phases[i].duration){idx=i;break;}acc+=phases[i].duration;idx=i;}if(totalSecondsElapsed>=totalDuration){clearInterval(timerInterval);resetTimer();return;}const cur=phases[idx];let remain=(acc+cur.duration)-totalSecondsElapsed;phaseNameDisplay.textContent=formatTime(remain);phaseInfoDisplay.textContent=`${cur.name}: ${cur.info}`;}
+    function startTimer(){if(isRunning){clearInterval(timerInterval);startButton.textContent="START";isRunning=false;}else{isRunning=true;startButton.textContent="PAUSE";timerInterval=setInterval(()=>{totalSecondsElapsed++;updateDisplay();},1000);}}
+    function resetTimer(){clearInterval(timerInterval);totalSecondsElapsed=0;startButton.textContent="START";isRunning=false;phaseNameDisplay.textContent=formatTime(phases[0].duration);phaseInfoDisplay.textContent=`${phases[0].name}: ${phases[0].info}`;}
+    startButton.addEventListener('click',startTimer); resetButton.addEventListener('click',resetTimer); updateDisplay();
+
+    const MAPS={"通常":"maps/normal.png","火口":"maps/crater.png","山嶺":"maps/ridge.png","腐れ森":"maps/rotten.png","ノクラテオ":"maps/nocrateo.png"};
+    const selectEl=document.getElementById('mapSelect');
+    const imgEl=document.getElementById('gameMap');
+    const saved=localStorage.getItem('nr_map_choice')||"通常";
+    if(MAPS[saved])selectEl.value=saved;
+    imgEl.src=MAPS[selectEl.value];
+    selectEl.addEventListener('change',()=>{const key=selectEl.value;imgEl.src=MAPS[key];localStorage.setItem('nr_map_choice',key);});
+  </script>
+</body>
+</html>
