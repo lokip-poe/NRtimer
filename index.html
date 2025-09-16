@@ -20,7 +20,7 @@
       box-sizing: border-box;
       font-size: 14px;
     }
-   /* 既存のPC用レイアウト */
+/* PC用レイアウト */
 .main-container {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -28,9 +28,12 @@
     "timer map"
     "rune-cost map"
     "weakness-table weakness-table";
+  gap: 10px;
+  width: 100%;
+  max-width: 1150px;
 }
 
-/* スマホ用レイアウトを追記 */
+/* スマホ用レイアウト */
 @media (max-width: 768px) {
   .main-container {
     grid-template-columns: 1fr;
@@ -43,10 +46,6 @@
   }
 }
 
-      gap: 10px;
-      width: 100%;
-      max-width: 1150px;
-    }
     .grid-item {
       background-color: #1e1e1e;
       padding: 10px;
@@ -230,4 +229,5 @@
   </script>
 </body>
 </html>
+
 
