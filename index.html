@@ -23,14 +23,14 @@
     /* PC: 左=タイマー系 / 中央=マップ / 右=簡易弱点、下段=詳細弱点 */
     .main-container {
       display: grid;
-      grid-template-columns: 260px 1fr 280px;
+      grid-template-columns: 250px 1fr 250px;
       grid-template-areas:
         "timer map weakness-mini"
         "phases map weakness-mini"
         "rune-cost map weakness-mini"
         "weakness-detail weakness-detail weakness-detail";
       gap: 10px;
-      width: 100%;
+      width: 150%;
       max-width: 1400px;
     }
     /* SP: 指定順で縦並び */
@@ -214,4 +214,5 @@
   </script>
 </body>
 </html>
+
 
