@@ -20,27 +20,28 @@
       box-sizing: border-box;
       font-size: 14px;
     }
-    /* PC */
+    /* PC: 左=タイマー系 / 中央=マップ / 右=簡易弱点、下段=詳細弱点 */
     .main-container {
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 280px 1fr 280px;
       grid-template-areas:
-        "timer map"
-        "phases map"
-        "rune-cost map"
-        "weakness-table weakness-table";
+        "timer map weakness-mini"
+        "phases map weakness-mini"
+        "rune-cost map weakness-mini"
+        "weakness-detail weakness-detail weakness-detail";
       gap: 10px;
       width: 100%;
-      max-width: 1150px;
+      max-width: 1400px;
     }
-    /* SP */
+    /* SP: 指定順で縦並び */
     @media (max-width: 768px) {
       .main-container {
         grid-template-columns: 1fr;
         grid-template-areas:
           "timer"
           "map"
-          "weakness-table"
+          "weakness-mini"
+          "weakness-detail"
           "phases"
           "rune-cost";
       }
@@ -58,62 +59,45 @@
       text-align: center;
     }
 
+    /* ---- タイマー ---- */
     .timer-wrapper { grid-area: timer; align-items: stretch; }
-    #timer-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.1em;
-      font-weight: 700;
-      color: #d4af37;
-      margin-bottom: 0.3em;
-    }
-    #phase-name {
-      font-size: 2.2em;
-      font-weight: bold;
-      color: #ffff88;
-      text-shadow: 0 0 8px rgba(255,255,136,0.7);
-      margin: 0.2em 0;
-    }
+    #timer-title { font-family: 'Cinzel', serif; font-size: 1.1em; font-weight: 700; color: #d4af37; margin-bottom: 0.3em; }
+    #phase-name { font-size: 2.2em; font-weight: bold; color: #ffff88; text-shadow: 0 0 8px rgba(255,255,136,0.7); margin: 0.2em 0; }
     #phase-info { font-size: 0.85em; color: #ccc; margin-bottom: 0.5em; }
     .buttons { display: flex; justify-content: center; gap: 0.5em; margin-bottom: 0.8em; }
-    .buttons button {
-      padding: 0.3em 0.6em;
-      font-size: 0.8em;
-      font-weight: bold;
-      border: none;
-      border-radius: 0.4em;
-      cursor: pointer;
-    }
+    .buttons button { padding: 0.3em 0.6em; font-size: 0.8em; font-weight: bold; border: none; border-radius: 0.4em; cursor: pointer; }
     #startButton { background-color: #556b2f; color: #fff; }
     #resetButton { background-color: #8b0000; color: #fff; }
 
+    /* ---- フェーズ表 ---- */
     .phases-table-container { grid-area: phases; width: 100%; }
     .phases-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
     .phases-table-container table { width: 100%; border-collapse: collapse; }
-    .phases-table-container th, .phases-table-container td {
-      border: 1px solid #666;
-      padding: 6px 10px;
-      text-align: center;
-    }
+    .phases-table-container th, .phases-table-container td { border: 1px solid #666; padding: 6px 10px; text-align: center; }
     .phases-table-container th { color: #d4af37; background:#111; }
 
+    /* ---- ルーン表 ---- */
     .rune-cost-table-container { grid-area: rune-cost; width: 100%; }
     .rune-cost-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
     .rune-cost-table-container table { width: 100%; border-collapse: collapse; }
-    .rune-cost-table-container th, .rune-cost-table-container td {
-      border: 1px solid #666;
-      padding: 6px 10px;
-      text-align: center;
-    }
+    .rune-cost-table-container th, .rune-cost-table-container td { border: 1px solid #666; padding: 6px 10px; text-align: center; }
     .rune-cost-table-container th { color: #d4af37; background:#111; }
 
+    /* ---- マップ ---- */
     .map-panel { grid-area: map; align-items: stretch; }
     .map-header { width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
     .map-header label { margin-right:4px; }
     #gameMap { width:100%; height:auto; border-radius:6px; border:1px solid #444; }
 
-    .weakness-table-container { grid-area: weakness-table; }
-    .weakness-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
-    .weakness-table-container img { width:100%; height:auto; border-radius:6px; border:1px solid #444; }
+    /* ---- 簡易弱点（右上） ---- */
+    .weakness-mini { grid-area: weakness-mini; }
+    .weakness-mini h2 { font-size: 1em; color:#d4af37; margin-bottom: 0.3em; }
+    .weakness-mini img { width:100%; height:auto; border-radius:6px; border:1px solid #444; display:block; }
+
+    /* ---- 詳細弱点（下段フル幅） ---- */
+    .weakness-detail { grid-area: weakness-detail; }
+    .weakness-detail h2 { font-size: 1em; color:#d4af37; margin-bottom: 0.3em; }
+    .weakness-detail img { width:100%; height:auto; border-radius:6px; border:1px solid #444; display:block; }
   </style>
 </head>
 <body>
@@ -191,10 +175,16 @@
       <img id="gameMap" alt="地変マップ">
     </div>
 
-    <!-- 弱点 -->
-    <div class="grid-item weakness-table-container">
+    <!-- 簡易弱点（右上） -->
+    <div class="grid-item weakness-mini">
+      <h2>ICON / WEAKNESS / TYPE</h2>
+      <img src="images/weakness-mini.png" alt="簡易弱点表">
+    </div>
+
+    <!-- 詳細弱点（下段フル幅） -->
+    <div class="grid-item weakness-detail">
       <h2>NIGHT LORD WEAKNESS</h2>
-      <img src="images/weakness.png" alt="弱点表">
+      <img src="images/weakness.png" alt="弱点表 詳細">
     </div>
 
   </div>
