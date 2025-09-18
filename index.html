@@ -2,50 +2,53 @@
 <html lang="ja">
 <head>
   <!-- ===== Favicon / PWA ===== -->
-<link rel="icon" href="/NRtimer/icons/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/NRtimer/icons/favicon-192.png" sizes="192x192" type="image/png">
-<link rel="apple-touch-icon" href="/NRtimer/icons/apple-touch-icon-180.png" sizes="180x180">
-<link rel="manifest" href="/NRtimer/site.webmanifest"> <!-- 任意。用意しないなら消してOK -->
-<meta name="theme-color" content="#121212">
+  <link rel="icon" href="/NRtimer/icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/NRtimer/icons/favicon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="/NRtimer/icons/apple-touch-icon-180.png" sizes="180x180">
+  <link rel="manifest" href="/NRtimer/site.webmanifest">
+  <meta name="theme-color" content="#121212">
 
-<!-- ===== OGP (Discord/Twitter のカード画像) ===== -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Night Reign Timer">
-<meta property="og:description" content="ナイトレイン用のタイマー・マップ・弱点表ツール">
-<meta property="og:url" content="https://lokip-poe.github.io/NRtimer/">
-<meta property="og:image" content="https://lokip-poe.github.io/NRtimer/icons/ogp.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-
-<!-- Twitter (X) 用：Discord も OGP を読むのでこれで十分 -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Night Reign Timer">
-<meta name="twitter:description" content="ナイトレイン用のタイマー・マップ・弱点表ツール">
-<meta name="twitter:image" content="https://lokip-poe.github.io/NRtimer/icons/ogp.png">
+  <!-- ===== OGP ===== -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Night Reign Timer">
+  <meta property="og:description" content="ナイトレイン用のタイマー・マップ・弱点表ツール">
+  <meta property="og:url" content="https://lokip-poe.github.io/NRtimer/">
+  <meta property="og:image" content="https://lokip-poe.github.io/NRtimer/icons/ogp.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Night Reign Timer">
+  <meta name="twitter:description" content="ナイトレイン用のタイマー・マップ・弱点表ツール">
+  <meta name="twitter:image" content="https://lokip-poe.github.io/NRtimer/icons/ogp.png">
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Night Reign Timer & Weakness + Map</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root{
+      --left-col-width: 220px;  /* 左カラムの基準幅（タイマー/表/ボス） */
+    }
+    /* ===== ベース ===== */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex; justify-content: center; align-items: center;
       min-height: 100vh; background-color: #121212; color: #f0f0f0;
       margin: 0; padding: 5px; overflow: auto; box-sizing: border-box; font-size: 14px;
     }
-    /* PC: 左=タイマー系 / 中央=マップ / 右=簡易弱点、下段=詳細弱点 */
     .main-container {
       display: grid;
-      grid-template-columns: 230px 1fr 350px;
+      grid-template-columns: var(--left-col-width) 1fr 345px;
       grid-template-areas:
-        "timer         map weakness-mini"
-        "phases        map weakness-mini"
-        "predict       map weakness-mini"
+        "timer           map weakness-mini"
+        "phases          map weakness-mini"
+        "predict         map weakness-mini"
         "weakness-detail weakness-detail weakness-detail";
-      gap: 10px; width: 100%; max-width: 1400px;
+      gap: 10px;
+      width: 100%;
+      max-width: 1400px;
     }
-    /* SP: 指定順で縦並び */
+    /* モバイルは縦並び */
     @media (max-width: 768px) {
       .main-container {
         grid-template-columns: 1fr;
@@ -59,49 +62,69 @@
       }
     }
 
+    /* カード共通 */
     .grid-item {
-      background-color: #1e1e1e; padding: 5px; border-radius: 6px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.6); border: 1px solid #333;
-      display: flex; flex-direction: column; align-items: center; text-align: center;
+      background-color: #1e1e1e;
+      padding: 5px;
+      border-radius: 6px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+      border: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-self: start;         /* 伸びずに上寄せ */
+      height: fit-content;       /* 中身ぶんだけ */
     }
+    @supports not (height: fit-content){ .grid-item{ height:auto; } }
 
-    /* ---- タイマー ---- */
-    .timer-wrapper { grid-area: timer; align-items: stretch; }
+    /* ===== 左カラム3つの共通（幅・中央寄せ・余白） ===== */
+    .left-block{
+      width: 100%;
+      max-width: var(--left-col-width);
+      margin: 0 auto;            /* 横方向センター */
+      text-align: center;
+    }
+    .left-block h2{ margin-bottom: .5em; } /* 見出し下の余白だけ軽く */
+
+    /* ===== タイマー ===== */
+    .timer-wrapper { grid-area: timer; }
     #timer-title { font-family: 'Cinzel', serif; font-size: 1.1em; font-weight: 700; color: #d4af37; margin-bottom: 0.3em; }
     #phase-name { font-size: 2.2em; font-weight: bold; color: #ffff88; text-shadow: 0 0 8px rgba(255,255,136,0.7); margin: 0.2em 0; }
     #phase-info { font-size: 0.85em; color: #ccc; margin-bottom: 0.5em; }
-    .buttons { display: flex; justify-content: center; gap: 0.5em; margin-bottom: 0.8em; }
+    .buttons { display: flex; justify-content: center; gap: 0.5em; margin-bottom: 0.6em; }
     .buttons button { padding: 0.3em 0.6em; font-size: 0.8em; font-weight: bold; border: none; border-radius: 0.4em; cursor: pointer; }
     #startButton { background-color: #556b2f; color: #fff; }
     #resetButton { background-color: #8b0000; color: #fff; }
 
-    /* ---- フェーズ表 ---- */
-    .phases-table-container { grid-area: phases; width: 100%; }
-    .phases-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
-    .phases-table-container table { width: auto; border-collapse: collapse; }
-    .phases-table-container th, .phases-table-container td { border: 1px solid #666; padding: 6px 10px; text-align: center; }
+    /* ===== フェーズ表 ===== */
+    .phases-table-container { grid-area: phases; }
+    .phases-table-container h2 { font-size: 1em; color: #d4af37; }
+    .phases-table-container table { width: 100%; border-collapse: collapse; }
+    .phases-table-container th, .phases-table-container td {
+      border: 1px solid #666; padding: 6px 10px; text-align: center;
+    }
     .phases-table-container th { color: #d4af37; background:#111; }
 
-    /* ---- 1日目ボス → アイコン最大4枚 ---- */
-    .prediction-panel { grid-area: predict; width: 100%; }
-    .prediction-panel h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
+    /* ===== 1日目ボス → アイコン最大4枚 ===== */
+    .prediction-panel { grid-area: predict; }
+    .prediction-panel h2 { font-size: 1em; color: #d4af37; }
     .prediction-form { width: 100%; display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom:8px; }
     .icon-grid { width:100%; display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; }
     .icon-slot { aspect-ratio: 1 / 1; background:#0f0f0f; border:1px dashed #555; border-radius:6px; display:grid; place-items:center; color:#888; font-size:12px; }
     .icon-slot img { width:100%; height:100%; object-fit:contain; display:block; border-radius:6px; }
 
-    /* ---- マップ ---- */
+    /* ===== マップ ===== */
     .map-panel { grid-area: map; align-items: stretch; }
     .map-header { width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; gap:8px; flex-wrap:wrap; }
     .map-header label { margin-right:4px; }
     #gameMap { width:100%; height:auto; border-radius:6px; border:1px solid #444; }
 
-    /* ---- 簡易弱点（右上） ---- */
+    /* ===== 簡易弱点（右上） ===== */
     .weakness-mini { grid-area: weakness-mini; }
     .weakness-mini h2 { font-size: 1em; color:#d4af37; margin-bottom: 0.3em; }
     .weakness-mini img { width:100%; height:auto; border-radius:6px; border:1px solid #444; display:block; }
 
-    /* ---- 詳細弱点（下段フル幅） ---- */
+    /* ===== 詳細弱点（下段フル幅） ===== */
     .weakness-detail { grid-area: weakness-detail; }
     .weakness-detail h2 { font-size: 1em; color:#d4af37; margin-bottom: 0.3em; }
     .weakness-detail img { width:100%; height:auto; border-radius:6px; border:1px solid #444; display:block; }
@@ -111,7 +134,7 @@
   <div class="main-container">
 
     <!-- タイマー -->
-    <div class="grid-item timer-wrapper">
+    <div class="grid-item timer-wrapper left-block">
       <div id="timer-title">NIGHTREIGN TIMER</div>
       <div id="phase-name">04:30</div>
       <div id="phase-info">Phase 1: 4.5m</div>
@@ -122,7 +145,7 @@
     </div>
 
     <!-- フェーズ表 -->
-    <div class="grid-item phases-table-container">
+    <div class="grid-item phases-table-container left-block">
       <h2>PHASE DURATIONS</h2>
       <table>
         <thead>
@@ -138,7 +161,7 @@
     </div>
 
     <!-- 1日目ボス → アイコン -->
-    <div class="grid-item prediction-panel">
+    <div class="grid-item prediction-panel left-block">
       <h2>DAY 1 TARGET → POSSIBLE BOSSES</h2>
       <div class="prediction-form">
         <label for="day1BossSelect">1日目ボス：</label>
@@ -158,7 +181,6 @@
           <option>爛れた樹霊</option>
           <option>接ぎ木の君主</option>
           <option>王族の幽鬼</option>
-          
         </select>
       </div>
       <div id="iconGrid" class="icon-grid">
@@ -203,22 +225,51 @@
   </div>
 
   <script>
-    /* ===== タイマー（既存どおり） ===== */
+    /* ===== タイマー ===== */
     const phaseNameDisplay=document.getElementById('phase-name');
     const phaseInfoDisplay=document.getElementById('phase-info');
     const startButton=document.getElementById('startButton');
     const resetButton=document.getElementById('resetButton');
     let timerInterval; let totalSecondsElapsed=0;
-    const phases=[{duration:270,name:"Phase 1",info:"4.5m"},{duration:180,name:"Phase 2",info:"3m"},{duration:210,name:"Phase 3",info:"3.5m"},{duration:180,name:"Phase 4",info:"3m"}];
-    let totalDuration=phases.reduce((s,p)=>s+p.duration,0);
+    const phases=[
+      {duration:270,name:"Phase 1",info:"4.5m"},
+      {duration:180,name:"Phase 2",info:"3m"},
+      {duration:210,name:"Phase 3",info:"3.5m"},
+      {duration:180,name:"Phase 4",info:"3m"}
+    ];
+    const totalDuration=phases.reduce((s,p)=>s+p.duration,0);
     let isRunning=false;
-    function formatTime(t){const m=Math.floor(t/60),s=t%60;return String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');}
-    function updateDisplay(){let idx=0,acc=0;for(let i=0;i<phases.length;i++){if(totalSecondsElapsed<acc+phases[i].duration){idx=i;break;}acc+=phases[i].duration;idx=i;}if(totalSecondsElapsed>=totalDuration){clearInterval(timerInterval);resetTimer();return;}const cur=phases[idx];let remain=(acc+cur.duration)-totalSecondsElapsed;phaseNameDisplay.textContent=formatTime(remain);phaseInfoDisplay.textContent=`${cur.name}: ${cur.info}`;}
-    function startTimer(){if(isRunning){clearInterval(timerInterval);startButton.textContent="START";isRunning=false;}else{isRunning=true;startButton.textContent="PAUSE";timerInterval=setInterval(()=>{totalSecondsElapsed++;updateDisplay();},1000);}}
-    function resetTimer(){clearInterval(timerInterval);totalSecondsElapsed=0;startButton.textContent="START";isRunning=false;phaseNameDisplay.textContent=formatTime(phases[0].duration);phaseInfoDisplay.textContent=`${phases[0].name}: ${phases[0].info}`;}
-    startButton.addEventListener('click',startTimer); resetButton.addEventListener('click',resetTimer); updateDisplay();
+    const fmt=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`;
+    function updateDisplay(){
+      let idx=0,acc=0;
+      for(let i=0;i<phases.length;i++){
+        if(totalSecondsElapsed<acc+phases[i].duration){ idx=i; break; }
+        acc+=phases[i].duration; idx=i;
+      }
+      if(totalSecondsElapsed>=totalDuration){ clearInterval(timerInterval); resetTimer(); return; }
+      const cur=phases[idx];
+      const remain=(acc+cur.duration)-totalSecondsElapsed;
+      phaseNameDisplay.textContent=fmt(remain);
+      phaseInfoDisplay.textContent=`${cur.name}: ${cur.info}`;
+    }
+    function startTimer(){
+      if(isRunning){
+        clearInterval(timerInterval); startButton.textContent="START"; isRunning=false;
+      }else{
+        isRunning=true; startButton.textContent="PAUSE";
+        timerInterval=setInterval(()=>{ totalSecondsElapsed++; updateDisplay(); },1000);
+      }
+    }
+    function resetTimer(){
+      clearInterval(timerInterval); totalSecondsElapsed=0; startButton.textContent="START"; isRunning=false;
+      phaseNameDisplay.textContent=fmt(phases[0].duration);
+      phaseInfoDisplay.textContent=`${phases[0].name}: ${phases[0].info}`;
+    }
+    startButton.addEventListener('click',startTimer);
+    resetButton.addEventListener('click',resetTimer);
+    updateDisplay();
 
-    /* ===== マップ切替（?????? を含む） ===== */
+    /* ===== マップ切替 ===== */
     const MAPS={
       "通常":"maps/normal.png",
       "火口":"maps/crater.png",
@@ -230,53 +281,49 @@
     const selectEl=document.getElementById('mapSelect');
     const imgEl=document.getElementById('gameMap');
     const saved=localStorage.getItem('nr_map_choice')||"通常";
-    if(MAPS[saved])selectEl.value=saved;
+    if(MAPS[saved]) selectEl.value=saved;
     imgEl.src=MAPS[selectEl.value];
-    selectEl.addEventListener('change',()=>{const key=selectEl.value;imgEl.src=MAPS[key];localStorage.setItem('nr_map_choice',key);});
+    selectEl.addEventListener('change',()=>{
+      const key=selectEl.value; imgEl.src=MAPS[key]; localStorage.setItem('nr_map_choice',key);
+    });
 
     /* ===== 1日目ボス → アイコン最大4枚 ===== */
-   const BOSS_ICONS = {
-  "亜人":             ["icons/gla.png","icons/nam.png"],
-  "鈴玉狩り":         ["icons/gla.png","icons/nam.png"],
-  "貪食ドラゴン":     ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
-  "ミミズ顔":         ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
-  "夜の騎兵":         ["icons/ede.png","icons/ful.png","icons/nam.png"],
-  "英雄のガーゴイル": ["icons/ede.png","icons/mar.png","icons/nam.png"],
-  "公のフレイディア": ["icons/ede.png","icons/lib.png","icons/kal.png","icons/nam.png"],
-  "百足のデーモン":    ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
-  "戦場の宿将":       ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
-  "溶鉄デーモン":      ["icons/gno.png","icons/mar.png","icons/kal.png","icons/nam.png"],
-  "ディビアの呼び舟":  ["icons/gno.png","icons/lib.png","icons/kal.png","icons/nam.png"],
-  "爛れた樹霊":       ["icons/gno.png","icons/kal.png","icons/nam.png"],
-  "接ぎ木の君主":      ["icons/mar.png","icons/kal.png","icons/nam.png"],
-  "王族の幽鬼":       ["icons/lib.png","icons/ful.png","icons/nam.png"]
-};
-
-
-    const bossSelect = document.getElementById('day1BossSelect');
-    const iconGrid = document.getElementById('iconGrid');
-
+    const BOSS_ICONS = {
+      "亜人":             ["icons/gla.png","icons/nam.png"],
+      "鈴玉狩り":         ["icons/gla.png","icons/nam.png"],
+      "貪食ドラゴン":     ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
+      "ミミズ顔":         ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
+      "夜の騎兵":         ["icons/ede.png","icons/ful.png","icons/nam.png"],
+      "英雄のガーゴイル": ["icons/ede.png","icons/mar.png","icons/nam.png"],
+      "公のフレイディア": ["icons/ede.png","icons/lib.png","icons/kal.png","icons/nam.png"],
+      "百足のデーモン":   ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
+      "戦場の宿将":       ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
+      "溶鉄デーモン":     ["icons/gno.png","icons/mar.png","icons/kal.png","icons/nam.png"],
+      "ディビアの呼び舟": ["icons/gno.png","icons/lib.png","icons/kal.png","icons/nam.png"],
+      "爛れた樹霊":       ["icons/gno.png","icons/kal.png","icons/nam.png"],
+      "接ぎ木の君主":     ["icons/mar.png","icons/kal.png","icons/nam.png"],
+      "王族の幽鬼":       ["icons/lib.png","icons/ful.png","icons/nam.png"]
+    };
+    const bossSelect=document.getElementById('day1BossSelect');
+    const iconGrid=document.getElementById('iconGrid');
     function renderBossIcons(){
-      const boss = bossSelect.value;
-      const arr = BOSS_ICONS[boss] || [];
-      const slots = iconGrid.querySelectorAll('.icon-slot');
+      const boss=bossSelect.value;
+      const arr=BOSS_ICONS[boss]||[];
+      const slots=iconGrid.querySelectorAll('.icon-slot');
       for(let i=0;i<4;i++){
-        const slot = slots[i];
-        slot.innerHTML = '—';
+        const slot=slots[i];
+        slot.innerHTML='—';
         if(arr[i]){
-          const img = document.createElement('img');
-          img.src = arr[i];
-          img.alt = boss + ' 候補' + (i+1);
-          slot.innerHTML = '';
+          const img=document.createElement('img');
+          img.src=arr[i];
+          img.alt=boss+' 候補'+(i+1);
+          slot.innerHTML='';
           slot.appendChild(img);
         }
       }
     }
-
-    bossSelect.addEventListener('change', renderBossIcons);
-    renderBossIcons(); // 初期描画
+    bossSelect.addEventListener('change',renderBossIcons);
+    renderBossIcons();
   </script>
 </body>
 </html>
-
-
