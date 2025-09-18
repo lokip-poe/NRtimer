@@ -213,24 +213,23 @@
     selectEl.addEventListener('change',()=>{const key=selectEl.value;imgEl.src=MAPS[key];localStorage.setItem('nr_map_choice',key);});
 
     /* ===== 1日目ボス → アイコン最大4枚 ===== */
-    const BOSS_ICONS = {
-      // ここにアイコン画像のパスを入れてね（最大4つまで表示）
-      // 例:
-      "亜人":           ["icons/gla.png","icons/nam.png"],
-      "鈴玉狩り":       ["icons/gla.png","icons/nam.png"],
-      "貪食ドラゴン":   ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
-      "ミミズ顔":       ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
-      "夜の騎兵":       ["icons/ede.png","icons/ful.png","icons/nam.png"],
-      "英雄のガーゴイル":["icons/ede.png","icons/mar.png","icons/nam.png"],
-      "公のフレイディア":["icons/ede.png","icons/lib.png","icons/kal.png","icons/nam.png"],
-      "百足のデーモン":  ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
-      "戦場の宿将":     ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
-      "溶鉄デーモン":    ["icons/gno.png","icons/mar.png","icons/kal.png","icons/nam.png"]
-      "ディビアの呼び舟": ["icons/gno.png","icons/lib.png","icons/kal.png","icons/nam.png"]
-      "爛れた樹霊":     ["icons/gno.png","icons/kal.png","icons/nam.png"]
-      "接ぎ木の君主":    ["icons/mar.png","icons/kal.png","icons/nam.png"]
-      "王族の幽鬼":     ["icons/lib.png","icons/ful.png","icons/nam.png"]
-    };
+   const BOSS_ICONS = {
+  "亜人":             ["icons/gla.png","icons/nam.png"],
+  "鈴玉狩り":         ["icons/gla.png","icons/nam.png"],
+  "貪食ドラゴン":     ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
+  "ミミズ顔":         ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
+  "夜の騎兵":         ["icons/ede.png","icons/ful.png","icons/nam.png"],
+  "英雄のガーゴイル": ["icons/ede.png","icons/mar.png","icons/nam.png"],
+  "公のフレイディア": ["icons/ede.png","icons/lib.png","icons/kal.png","icons/nam.png"],
+  "百足のデーモン":    ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
+  "戦場の宿将":       ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
+  "溶鉄デーモン":      ["icons/gno.png","icons/mar.png","icons/kal.png","icons/nam.png"],
+  "ディビアの呼び舟":  ["icons/gno.png","icons/lib.png","icons/kal.png","icons/nam.png"],
+  "爛れた樹霊":       ["icons/gno.png","icons/kal.png","icons/nam.png"],
+  "接ぎ木の君主":      ["icons/mar.png","icons/kal.png","icons/nam.png"],
+  "王族の幽鬼":       ["icons/lib.png","icons/ful.png","icons/nam.png"]
+};
+
 
     const bossSelect = document.getElementById('day1BossSelect');
     const iconGrid = document.getElementById('iconGrid');
@@ -257,3 +256,4 @@
   </script>
 </body>
 </html>
+
