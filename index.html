@@ -8,30 +8,20 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #121212;
-      color: #f0f0f0;
-      margin: 0;
-      padding: 5px;
-      overflow: auto;
-      box-sizing: border-box;
-      font-size: 14px;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; background-color: #121212; color: #f0f0f0;
+      margin: 0; padding: 5px; overflow: auto; box-sizing: border-box; font-size: 14px;
     }
     /* PC: 左=タイマー系 / 中央=マップ / 右=簡易弱点、下段=詳細弱点 */
     .main-container {
       display: grid;
       grid-template-columns: 230px 1fr 350px;
       grid-template-areas:
-        "timer map weakness-mini"
-        "phases map weakness-mini"
-        "rune-cost map weakness-mini"
+        "timer         map weakness-mini"
+        "phases        map weakness-mini"
+        "predict       map weakness-mini"
         "weakness-detail weakness-detail weakness-detail";
-      gap: 10px;
-      width: 100%;
-      max-width: 1400px;
+      gap: 10px; width: 100%; max-width: 1400px;
     }
     /* SP: 指定順で縦並び */
     @media (max-width: 768px) {
@@ -43,20 +33,14 @@
           "weakness-mini"
           "weakness-detail"
           "phases"
-          "rune-cost";
+          "predict";
       }
     }
 
     .grid-item {
-      background-color: #1e1e1e;
-      padding: 5px;
-      border-radius: 6px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.6);
-      border: 1px solid #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+      background-color: #1e1e1e; padding: 5px; border-radius: 6px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.6); border: 1px solid #333;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
     }
 
     /* ---- タイマー ---- */
@@ -76,16 +60,17 @@
     .phases-table-container th, .phases-table-container td { border: 1px solid #666; padding: 6px 10px; text-align: center; }
     .phases-table-container th { color: #d4af37; background:#111; }
 
-    /* ---- ルーン表 ---- */
-    .rune-cost-table-container { grid-area: rune-cost; width: 100%; }
-    .rune-cost-table-container h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
-    .rune-cost-table-container table { width: auto; border-collapse: collapse; }
-    .rune-cost-table-container th, .rune-cost-table-container td { border: 1px solid #666; padding: 6px 10px; text-align: center; }
-    .rune-cost-table-container th { color: #d4af37; background:#111; }
+    /* ---- 1日目ボス → アイコン最大4枚 ---- */
+    .prediction-panel { grid-area: predict; width: 100%; }
+    .prediction-panel h2 { font-size: 1em; color: #d4af37; margin-bottom: 0.3em; }
+    .prediction-form { width: 100%; display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom:8px; }
+    .icon-grid { width:100%; display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; }
+    .icon-slot { aspect-ratio: 1 / 1; background:#0f0f0f; border:1px dashed #555; border-radius:6px; display:grid; place-items:center; color:#888; font-size:12px; }
+    .icon-slot img { width:100%; height:100%; object-fit:contain; display:block; border-radius:6px; }
 
     /* ---- マップ ---- */
     .map-panel { grid-area: map; align-items: stretch; }
-    .map-header { width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .map-header { width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; gap:8px; flex-wrap:wrap; }
     .map-header label { margin-right:4px; }
     #gameMap { width:100%; height:auto; border-radius:6px; border:1px solid #444; }
 
@@ -130,31 +115,36 @@
       </table>
     </div>
 
-    <!-- ルーンコスト -->
-    <div class="grid-item rune-cost-table-container">
-      <h2>RUNE COST IN NIGHTREIGN</h2>
-      <table>
-        <thead>
-          <tr><th>Level</th><th>Level Cost</th><th>Total Cost</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>0</td><td>0</td></tr>
-          <tr><td>2</td><td>3698</td><td>3698</td></tr>
-          <tr><td>3</td><td>7922</td><td>11620</td></tr>
-          <tr><td>4</td><td>12348</td><td>23968</td></tr>
-          <tr><td>5</td><td>16978</td><td>40946</td></tr>
-          <tr><td>6</td><td>21818</td><td>62764</td></tr>
-          <tr><td>7</td><td>26869</td><td>89633</td></tr>
-          <tr><td>8</td><td>32137</td><td>121770</td></tr>
-          <tr><td>9</td><td>37624</td><td>159394</td></tr>
-          <tr><td>10</td><td>43335</td><td>202729</td></tr>
-          <tr><td>11</td><td>49271</td><td>252000</td></tr>
-          <tr><td>12</td><td>55439</td><td>307439</td></tr>
-          <tr><td>13</td><td>61840</td><td>369279</td></tr>
-          <tr><td>14</td><td>68479</td><td>437758</td></tr>
-          <tr><td>15</td><td>75358</td><td>513116</td></tr>
-        </tbody>
-      </table>
+    <!-- 1日目ボス → アイコン -->
+    <div class="grid-item prediction-panel">
+      <h2>DAY 1 TARGET → POSSIBLE BOSSES</h2>
+      <div class="prediction-form">
+        <label for="day1BossSelect">1日目ボス：</label>
+        <select id="day1BossSelect">
+          <option value="">未選択</option>
+          <option>亜人</option>
+          <option>鈴玉狩り</option>
+          <option>貪食ドラゴン</option>
+          <option>ミミズ顔</option>
+          <option>夜の騎兵</option>
+          <option>英雄のガーゴイル</option>
+          <option>公のフレイディア</option>
+          <option>百足のデーモン</option>
+          <option>戦場の宿将</option>
+          <option>溶鉄デーモン</option>
+          <option>ディビアの呼び舟</option>
+          <option>爛れた樹霊</option>
+          <option>接ぎ木の君主</option>
+          <option>王族の幽鬼</option>
+          
+        </select>
+      </div>
+      <div id="iconGrid" class="icon-grid">
+        <div class="icon-slot" data-slot="0">—</div>
+        <div class="icon-slot" data-slot="1">—</div>
+        <div class="icon-slot" data-slot="2">—</div>
+        <div class="icon-slot" data-slot="3">—</div>
+      </div>
     </div>
 
     <!-- マップ -->
@@ -191,6 +181,7 @@
   </div>
 
   <script>
+    /* ===== タイマー（既存どおり） ===== */
     const phaseNameDisplay=document.getElementById('phase-name');
     const phaseInfoDisplay=document.getElementById('phase-info');
     const startButton=document.getElementById('startButton');
@@ -205,24 +196,64 @@
     function resetTimer(){clearInterval(timerInterval);totalSecondsElapsed=0;startButton.textContent="START";isRunning=false;phaseNameDisplay.textContent=formatTime(phases[0].duration);phaseInfoDisplay.textContent=`${phases[0].name}: ${phases[0].info}`;}
     startButton.addEventListener('click',startTimer); resetButton.addEventListener('click',resetTimer); updateDisplay();
 
-    const MAPS={"通常":"maps/normal.png","火口":"maps/crater.png","山嶺":"maps/ridge.png","腐れ森":"maps/rotten.png","ノクラテオ":"maps/nocrateo.png","??????":"maps/unknown.png"};
+    /* ===== マップ切替（?????? を含む） ===== */
+    const MAPS={
+      "通常":"maps/normal.png",
+      "火口":"maps/crater.png",
+      "山嶺":"maps/ridge.png",
+      "腐れ森":"maps/rotten.png",
+      "ノクラテオ":"maps/nocrateo.png",
+      "??????":"maps/unknown.png"
+    };
     const selectEl=document.getElementById('mapSelect');
     const imgEl=document.getElementById('gameMap');
     const saved=localStorage.getItem('nr_map_choice')||"通常";
     if(MAPS[saved])selectEl.value=saved;
     imgEl.src=MAPS[selectEl.value];
     selectEl.addEventListener('change',()=>{const key=selectEl.value;imgEl.src=MAPS[key];localStorage.setItem('nr_map_choice',key);});
+
+    /* ===== 1日目ボス → アイコン最大4枚 ===== */
+    const BOSS_ICONS = {
+      // ここにアイコン画像のパスを入れてね（最大4つまで表示）
+      // 例:
+      "亜人":           ["icons/gla.png","icons/nam.png"],
+      "鈴玉狩り":       ["icons/gla.png","icons/nam.png"],
+      "貪食ドラゴン":   ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
+      "ミミズ顔":       ["icons/ede.png","icons/mar.png","icons/ful.png","icons/nam.png"],
+      "夜の騎兵":       ["icons/ede.png","icons/ful.png","icons/nam.png"],
+      "英雄のガーゴイル":["icons/ede.png","icons/mar.png","icons/nam.png"],
+      "公のフレイディア":["icons/ede.png","icons/lib.png","icons/kal.png","icons/nam.png"],
+      "百足のデーモン":  ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
+      "戦場の宿将":     ["icons/gno.png","icons/lib.png","icons/ful.png","icons/nam.png"],
+      "溶鉄デーモン":    ["icons/gno.png","icons/mar.png","icons/kal.png","icons/nam.png"]
+      "ディビアの呼び舟": ["icons/gno.png","icons/lib.png","icons/kal.png","icons/nam.png"]
+      "爛れた樹霊":     ["icons/gno.png","icons/kal.png","icons/nam.png"]
+      "接ぎ木の君主":    ["icons/mar.png","icons/kal.png","icons/nam.png"]
+      "王族の幽鬼":     ["icons/lib.png","icons/ful.png","icons/nam.png"]
+    };
+
+    const bossSelect = document.getElementById('day1BossSelect');
+    const iconGrid = document.getElementById('iconGrid');
+
+    function renderBossIcons(){
+      const boss = bossSelect.value;
+      const arr = BOSS_ICONS[boss] || [];
+      const slots = iconGrid.querySelectorAll('.icon-slot');
+      for(let i=0;i<4;i++){
+        const slot = slots[i];
+        slot.innerHTML = '—';
+        if(arr[i]){
+          const img = document.createElement('img');
+          img.src = arr[i];
+          img.alt = boss + ' 候補' + (i+1);
+          slot.innerHTML = '';
+          slot.appendChild(img);
+        }
+      }
+    }
+
+    bossSelect.addEventListener('change', renderBossIcons);
+    renderBossIcons(); // 初期描画
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
