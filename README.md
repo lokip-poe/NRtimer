@@ -1,4 +1,3 @@
-# NRtimer
 # ナイトレイン タイマー (Night Reign Timer)
 
 Elden Ring DLC **ナイトレイン (Night Reign)** 用の攻略支援ツールです。  
