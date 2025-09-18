@@ -169,6 +169,7 @@
             <option>山嶺</option>
             <option>腐れ森</option>
             <option>ノクラテオ</option>
+            <option>??????</option>
           </select>
         </div>
       </div>
@@ -204,7 +205,7 @@
     function resetTimer(){clearInterval(timerInterval);totalSecondsElapsed=0;startButton.textContent="START";isRunning=false;phaseNameDisplay.textContent=formatTime(phases[0].duration);phaseInfoDisplay.textContent=`${phases[0].name}: ${phases[0].info}`;}
     startButton.addEventListener('click',startTimer); resetButton.addEventListener('click',resetTimer); updateDisplay();
 
-    const MAPS={"通常":"maps/normal.png","火口":"maps/crater.png","山嶺":"maps/ridge.png","腐れ森":"maps/rotten.png","ノクラテオ":"maps/nocrateo.png"};
+    const MAPS={"通常":"maps/normal.png","火口":"maps/crater.png","山嶺":"maps/ridge.png","腐れ森":"maps/rotten.png","ノクラテオ":"maps/nocrateo.png","????":"maps/unknown.png"};
     const selectEl=document.getElementById('mapSelect');
     const imgEl=document.getElementById('gameMap');
     const saved=localStorage.getItem('nr_map_choice')||"通常";
@@ -214,6 +215,7 @@
   </script>
 </body>
 </html>
+
 
 
 
